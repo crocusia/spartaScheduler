@@ -4,34 +4,38 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
 public class Task {
     private Long id; //고유 키
-    private User user; //작성자 id 외래키
+    private Long userId; //작성자 id 외래키
     private String content; //할 일
     private String password; //비밀번호
-    private LocalDateTime updatedAt; //작성, 수정일
+    private Timestamp createdAt; //등록일
+    private Timestamp updatedAt; //수정일
 
-    public Task(User user, String content, String password){
-        this.user = user;
+    public Task(Long userId, String content, String password){
+        this.userId = userId;
         this.content = content;
         this.password = password;
-        this.updatedAt = new Timestamp(System.currentTimeMillis()).toLocalDateTime();
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+        this.updatedAt = new Timestamp(System.currentTimeMillis());
     }
     //할 일 수정
-    public void update(User user){
-        this.user = user;
+    public void updateUserId(Long userId){
+        this.userId = userId;
+        this.updatedAt = new Timestamp(System.currentTimeMillis());
     }
     //작성자명 수정
-    public void update(String content){
+    public void updateContent(String content){
         this.content = content;
+        this.updatedAt = new Timestamp(System.currentTimeMillis());
     }
     //할 일, 작성자명 수정
-    public void update(User user, String content){
-        this.user = user;
+    public void updateUserIdAndContent(Long userId, String content){
+        this.userId = userId;
         this.content = content;
+        this.updatedAt = new Timestamp(System.currentTimeMillis());
     }
 }

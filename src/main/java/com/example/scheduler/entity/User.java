@@ -1,17 +1,28 @@
 package com.example.scheduler.entity;
 
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     private Long id; //고유 키
     private String name; //이름
     private String email; //이메일
-    private LocalDateTime createAt; //유저 생성일
-    private LocalDateTime updateAt; //유저 정보 수정일
+    private Timestamp createdAt; //유저 생성일
+    private Timestamp updatedAt; //유저 정보 수정일
+
+    public User(String name, String email){
+        this.name = name;
+        this.email = email;
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+        this.updatedAt = new Timestamp(System.currentTimeMillis());
+    }
+
+    public void updateName(String name){
+        this.name = name;
+        this.updatedAt = new Timestamp(System.currentTimeMillis());
+    }
 }
