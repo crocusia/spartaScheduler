@@ -21,6 +21,7 @@ public class User {
         this.updatedAt = new Timestamp(System.currentTimeMillis());
     }
 
+    //작성자명 수정
     public void updateName(String name){
         this.name = name;
         this.updatedAt = new Timestamp(System.currentTimeMillis());

@@ -22,20 +22,11 @@ public class Task {
         this.createdAt = new Timestamp(System.currentTimeMillis());
         this.updatedAt = new Timestamp(System.currentTimeMillis());
     }
+
     //할 일 수정
-    public void updateUserId(Long userId){
-        this.userId = userId;
-        this.updatedAt = new Timestamp(System.currentTimeMillis());
-    }
-    //작성자명 수정
     public void updateContent(String content){
         this.content = content;
         this.updatedAt = new Timestamp(System.currentTimeMillis());
     }
-    //할 일, 작성자명 수정
-    public void updateUserIdAndContent(Long userId, String content){
-        this.userId = userId;
-        this.content = content;
-        this.updatedAt = new Timestamp(System.currentTimeMillis());
-    }
+
 }
