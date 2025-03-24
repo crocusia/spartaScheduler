@@ -11,6 +11,7 @@ CREATE TABLE  tasks(
                        user_id BIGINT NOT NULL COMMENT '작성자 식별자', -- 외래키, 작성자명을 불러올 때 사용함
                        content VARCHAR(200) NOT NULL COMMENT '할 일', -- 최대 200자 제한
                        password CHAR(4) NOT NULL COMMENT '비밀번호', -- 4자리 핀 번호
-                       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '작성/수정일', -- UPDATE 마다 자동으로 시간 갱신됨
-                       FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE -- 작성자 삭제 시, 해당 작성자의 일정이 삭제됨
+                       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '작성일', -- 작성일
+                       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일', -- 수정일, UPDATE 마다 자동으로 시간 갱신됨
+                       FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE -- 외래키 / 작성자 삭제 시, 해당 작성자의 일정이 삭제됨
 );
