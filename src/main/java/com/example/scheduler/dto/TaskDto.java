@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 @Getter
 @AllArgsConstructor
 public class TaskDto {
-    private final Long id;
+    private final Long taskId;
     private final Long userId;  //유저 아이디로 서비스 레이어에서 유저 이름을 조회
     private final String content;
     private final String updateAt;
@@ -21,14 +21,14 @@ public class TaskDto {
     private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
     public TaskDto(Task task) {
-        this.id = task.getId();
+        this.taskId = task.getTaskId();
         this.userId = task.getUserId();
         this.content = task.getContent();
         this.updateAt = formatter.format(task.getUpdatedAt()); //LocalTimeDate를 String으로 변환
     }
 
     public TaskDto(Long id, Task task){
-        this.id = id;
+        this.taskId = id;
         this.userId = task.getUserId();
         this.content = task.getContent();
         this.updateAt = formatter.format(task.getUpdatedAt()); //LocalTimeDate를 String으로 변환

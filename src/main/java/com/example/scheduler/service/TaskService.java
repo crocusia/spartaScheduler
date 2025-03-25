@@ -2,6 +2,7 @@ package com.example.scheduler.service;
 
 import com.example.scheduler.dto.TaskCreateRequestDto;
 import com.example.scheduler.dto.TaskResponseDto;
+import com.example.scheduler.dto.TaskUpdateRequestDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,4 +17,6 @@ public interface TaskService {
     List<TaskResponseDto> findTasks(Long userId, String updatedAt);
     //조회 - id를 통한 단일 일정 조회
     TaskResponseDto findTaskById(Long id);
+    //수정 - userId 또는 content 수정
+    TaskResponseDto updateTask(Long id, TaskUpdateRequestDto updateDto);
 }

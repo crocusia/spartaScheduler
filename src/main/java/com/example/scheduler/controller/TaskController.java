@@ -2,6 +2,7 @@ package com.example.scheduler.controller;
 
 import com.example.scheduler.dto.TaskCreateRequestDto;
 import com.example.scheduler.dto.TaskResponseDto;
+import com.example.scheduler.dto.TaskUpdateRequestDto;
 import com.example.scheduler.service.TaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,15 @@ public class TaskController {
     @GetMapping("/{id}")
     public ResponseEntity<TaskResponseDto> findTaskById(@PathVariable Long id) {
         return new ResponseEntity<>(taskService.findTaskById(id), HttpStatus.OK);
+    }
+
+    //일정 수정
+    @PatchMapping("/{id}")
+    public ResponseEntity<TaskResponseDto> updateTitle(
+            @PathVariable Long id,
+            @RequestBody TaskUpdateRequestDto updateDto
+    ) {
+        return new ResponseEntity<>(taskService.updateTask(id, updateDto), HttpStatus.OK);
     }
 
     //일정 삭제

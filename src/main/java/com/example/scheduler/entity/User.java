@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 @Getter
 @NoArgsConstructor
 public class User {
-    private Long id; //고유 키
+    private Long userId; //고유 키
     private String name; //이름
     private String email; //이메일
     private Timestamp createdAt; //유저 생성일

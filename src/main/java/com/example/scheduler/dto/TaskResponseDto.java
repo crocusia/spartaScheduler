@@ -9,13 +9,13 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class TaskResponseDto {
-    private Long id;          //일정 ID
+    private Long taskId;          //일정 ID
     private String name;      //유저 이름
     private String content;   //할 일
     private String updateAt;  //수정일
 
     public TaskResponseDto(String name, TaskDto task) {
-        this.id = task.getId();
+        this.taskId = task.getTaskId();
         this.name = name;
         this.content = task.getContent();
         this.updateAt = task.getUpdateAt();

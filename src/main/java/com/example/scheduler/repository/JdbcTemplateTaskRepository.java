@@ -75,17 +75,46 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
 
         sql.append("ORDER BY t.updated_at DESC"); //수정일 기준 내림차순 정렬
 
-        return jdbcTemplate.query(sql.toString(), taskRowMapperV2(), params.toArray());
+        return jdbcTemplate.query(sql.toString(), taskRowMapperResponseDto(), params.toArray());
     }
 
     //id에 해당하는 일정 선택 조회
     @Override
     public TaskDto findTaskByIdOrElseThrow(Long id){
-        List<TaskDto> result = jdbcTemplate.query("SELECT task_id, user_id, content, updated_at FROM tasks WHERE id = ?", taskRowMapper(), id);
-        return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
+        List<TaskDto> result = jdbcTemplate.query("SELECT task_id, user_id, content, updated_at FROM tasks WHERE id = ?", taskRowMapperDto(), id);
+        return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 일정입니다. = " + id));
     }
 
-    private RowMapper<TaskDto> taskRowMapper(){
+    //id에 따른 일정 수정을 위한 Task 조회
+    @Override
+    public Task findTaskByIdWithPwd(Long id){
+        List<Task> result = jdbcTemplate.query("SELECT * FROM tasks WHERE id = ?", taskRowMapperEntity(), id);
+        return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 일정입니다. = " + id));
+    }
+
+    //일정 업데이트
+    @Override
+    public void updateTask(Task task){
+        String sql = "UPDATE tasks SET user_id = ? WHERE task_id = ?";
+        jdbcTemplate.update(sql, task.getUserId(), task.getTaskId());
+    }
+
+    //매핑
+    private RowMapper<TaskResponseDto> taskRowMapperResponseDto(){
+        return new RowMapper<TaskResponseDto>() {
+            @Override
+            public TaskResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new TaskResponseDto(
+                        rs.getLong("task_id"),
+                        rs.getString("name"),
+                        rs.getString("content"),
+                        rs.getTimestamp("updated_at").toString()
+                );
+            }
+        };
+    }
+
+    private RowMapper<TaskDto> taskRowMapperDto(){
         return new RowMapper<TaskDto>() {
             @Override
             public TaskDto mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -99,15 +128,15 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
         };
     }
 
-    private RowMapper<TaskResponseDto> taskRowMapperV2(){
-        return new RowMapper<TaskResponseDto>() {
+    private RowMapper<Task> taskRowMapperEntity(){
+        return new RowMapper<Task>() {
             @Override
-            public TaskResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new TaskResponseDto(
+            public Task mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new Task(
                         rs.getLong("task_id"),
-                        rs.getString("name"),
+                        rs.getLong("user_id"),
                         rs.getString("content"),
-                        rs.getTimestamp("updated_at").toString()
+                        rs.getString("password")
                 );
             }
         };
