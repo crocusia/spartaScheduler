@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 //userId를 갖는 DTO
 
 @Getter
+@AllArgsConstructor
 public class TaskDto {
     private final Long id;
     private final Long userId;  //유저 아이디로 서비스 레이어에서 유저 이름을 조회
@@ -17,7 +18,7 @@ public class TaskDto {
     private final String updateAt;
 
     // 날짜 포맷 (YYYY-MM-DD HH:MM)
-    private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
     public TaskDto(Task task) {
         this.id = task.getId();
