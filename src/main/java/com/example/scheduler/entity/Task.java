@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
 
 @Getter
-@NoArgsConstructor
 public class Task {
+
     private Long id; //고유 키
     private Long userId; //작성자 id 외래키
     private String content; //할 일

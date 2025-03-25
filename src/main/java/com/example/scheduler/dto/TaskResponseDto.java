@@ -1,24 +1,21 @@
 package com.example.scheduler.dto;
 
-import com.example.scheduler.entity.Task;
 import lombok.Getter;
 
-import java.time.format.DateTimeFormatter;
+//응답을 위한 DTO
+//유저 Id가 아닌 이름을 가진다.
 
 @Getter
 public class TaskResponseDto {
-    private final Long id;
-    private final String name;
-    private final String content;
-    private final String updateAt;
+    private Long id;          //일정 ID
+    private String name;      //유저 이름
+    private String content;   //할 일
+    private String updateAt;  //수정일
 
-    // 날짜 포맷 (YYYY-MM-DD HH:MM)
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-    public TaskResponseDto(Task task) {
+    public TaskResponseDto(String name, TaskDto task) {
         this.id = task.getId();
-        this.name = task.getUser().getName();
+        this.name = name;
         this.content = task.getContent();
-        this.updateAt = task.getUpdatedAt().format(formatter); //LocalTimeDate를 String으로 변환
+        this.updateAt = task.getUpdateAt();
     }
 }
