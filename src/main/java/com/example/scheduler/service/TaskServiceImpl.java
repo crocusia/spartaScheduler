@@ -68,9 +68,10 @@ public class TaskServiceImpl implements TaskService{
             task.updateContent(updateDto.getContent());
         }
         //수정된 일정 저장
-        taskRepository.updateTask(task);
-        //수정된 일정의 내용을 TaskResponseDto 형태로 찾아서 반환
-        return findTaskById(task.getTaskId());
+        TaskDto taskDto = taskRepository.updateTask(task);
+        // 유저 Id 기반 유저 조회
+        String name = "조회 중";
+        return new TaskResponseDto(name, taskDto);
     }
 
     @Override

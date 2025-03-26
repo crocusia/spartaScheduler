@@ -107,9 +107,12 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
 
     //일정 업데이트
     @Override
-    public int updateTask(Task task){
-        String sql = "UPDATE tasks SET user_id = ? WHERE task_id = ?";
-        return jdbcTemplate.update(sql, task.getUserId(), task.getTaskId());
+    public TaskDto updateTask(Task task){
+        int updateRow = jdbcTemplate.update("UPDATE tasks SET user_id = ?, content = ? WHERE task_id = ?", task.getUserId(), task.getContent(), task.getTaskId());
+        if (updateRow == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + task.getTaskId());
+        }
+        return findTaskByIdOrElseThrow(task.getTaskId());
     }
 
     //일정 삭제

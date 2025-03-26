@@ -8,5 +8,5 @@ import lombok.Getter;
 public class TaskUpdateRequestDto {
     private Long userId;
     private String content;
-    private String password;
+    private String password; //필수
 }
