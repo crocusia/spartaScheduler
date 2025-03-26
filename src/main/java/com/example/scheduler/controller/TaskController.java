@@ -51,7 +51,9 @@ public class TaskController {
 
     //일정 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long id, @RequestBody TaskDeleteRequestDto deleteDto) {
+    public ResponseEntity<Void> deleteTask(
+            @PathVariable Long id,
+            @RequestBody TaskDeleteRequestDto deleteDto) {
         taskService.deleteTask(id, deleteDto);
         // 성공한 경우
         return new ResponseEntity<>(HttpStatus.OK);
