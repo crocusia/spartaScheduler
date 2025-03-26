@@ -26,7 +26,7 @@ public class UserController {
 
     //유저 Id로 조회
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDto> findTaskById(@PathVariable Long id) {
+    public ResponseEntity<UserResponseDto> findUserById(@PathVariable Long id) {
         return new ResponseEntity<>(userService.findUserById(id), HttpStatus.OK);
     }
 

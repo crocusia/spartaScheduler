@@ -102,9 +102,9 @@ public class JdbcTemplateUserRepository implements UserRepository {
             @Override
             public UserResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
                 return new UserResponseDto(
-                        rs.getLong("task_id"),
+                        rs.getLong("user_id"),
                         rs.getString("name"),
-                        rs.getString("content"),
+                        rs.getString("email"),
                         rs.getTimestamp("updated_at")
                 );
             }
@@ -117,7 +117,7 @@ public class JdbcTemplateUserRepository implements UserRepository {
                 return new User(
                         rs.getLong("user_id"),
                         rs.getString("name"),
-                        rs.getString("content"),
+                        rs.getString("email"),
                         rs.getString("password")
                 );
             }
