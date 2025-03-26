@@ -5,7 +5,6 @@ import com.example.scheduler.dto.TaskDto;
 import com.example.scheduler.entity.Task;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface TaskRepository {
     //DB에 Task 저장 및 저장 내용 반환

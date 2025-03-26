@@ -4,10 +4,6 @@ import com.example.scheduler.dto.TaskCreateRequestDto;
 import com.example.scheduler.dto.TaskDeleteRequestDto;
 import com.example.scheduler.dto.TaskResponseDto;
 import com.example.scheduler.dto.TaskUpdateRequestDto;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 

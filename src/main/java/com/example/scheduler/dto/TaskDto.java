@@ -16,22 +16,12 @@ public class TaskDto {
     private final Long taskId;
     private final Long userId;  //유저 아이디로 서비스 레이어에서 유저 이름을 조회
     private final String content;
-    private final String updateAt;
-
-    // 날짜 포맷 (YYYY-MM-DD HH:MM)
-    private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
-    public TaskDto(Task task) {
-        this.taskId = task.getTaskId();
-        this.userId = task.getUserId();
-        this.content = task.getContent();
-        this.updateAt = formatter.format(task.getUpdatedAt()); //LocalTimeDate를 String으로 변환
-    }
+    private final Timestamp updateAt; //DB 데이터를 그대로 반환
 
     public TaskDto(Long id, Task task, Timestamp updateTime){
         this.taskId = id;
         this.userId = task.getUserId();
         this.content = task.getContent();
-        this.updateAt = formatter.format(updateTime); //LocalTimeDate를 String으로 변환
+        this.updateAt = updateTime;
     }
 }
