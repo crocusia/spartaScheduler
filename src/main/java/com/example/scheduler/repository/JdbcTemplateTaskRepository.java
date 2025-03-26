@@ -12,8 +12,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.DataSource;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +29,9 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
     public JdbcTemplateTaskRepository(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
+
+    // 날짜 포맷 (YYYY-MM-DD HH:MM)
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
     //DB에 Task 저장 및 저장 내용 반환
     @Override
@@ -47,6 +53,7 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
     //userId 또는 updateAt에 해당하는 일정 전체 조회
     @Override
     public List<TaskResponseDto> findTasks(Long userId, String updatedAt){
+        //일정 전체 조회
         StringBuilder sql = new StringBuilder(
                 "SELECT t.task_id, t.user_id, u.name, t.content, t.updated_at " +
                         "FROM tasks t " +
@@ -69,8 +76,9 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
             } else {
                 sql.append("WHERE "); //아니면 바로 WHERE 추가 후
             }
-            sql.append("t.updated_at >= ? "); //수정일 조건 추가
-            params.add(updatedAt);
+            Date date = Date.valueOf(updatedAt);
+            sql.append("DATE(t.updated_at) >= ? "); //수정일 조건 추가
+            params.add(date);
         }
 
         sql.append("ORDER BY t.updated_at DESC"); //수정일 기준 내림차순 정렬
@@ -81,14 +89,14 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
     //id에 해당하는 일정 선택 조회
     @Override
     public TaskDto findTaskByIdOrElseThrow(Long id){
-        List<TaskDto> result = jdbcTemplate.query("SELECT task_id, user_id, content, updated_at FROM tasks WHERE id = ?", taskRowMapperDto(), id);
+        List<TaskDto> result = jdbcTemplate.query("SELECT task_id, user_id, content, updated_at FROM tasks WHERE task_id = ?", taskRowMapperDto(), id);
         return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 일정입니다. = " + id));
     }
 
     //id에 따른 일정 수정을 위한 Task 조회
     @Override
     public Task findTaskByIdWithPwd(Long id){
-        List<Task> result = jdbcTemplate.query("SELECT * FROM tasks WHERE id = ?", taskRowMapperEntity(), id);
+        List<Task> result = jdbcTemplate.query("SELECT * FROM tasks WHERE task_id = ?", taskRowMapperEntity(), id);
         return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 일정입니다. = " + id));
     }
 
@@ -108,7 +116,7 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
                         rs.getLong("task_id"),
                         rs.getString("name"),
                         rs.getString("content"),
-                        rs.getTimestamp("updated_at").toString()
+                        formatter.format(rs.getTimestamp("updated_at"))
                 );
             }
         };
@@ -122,7 +130,7 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
                         rs.getLong("task_id"),
                         rs.getLong("user_id"),
                         rs.getString("content"),
-                        rs.getTimestamp("updated_at").toString()
+                        formatter.format(rs.getTimestamp("updated_at"))
                 );
             }
         };

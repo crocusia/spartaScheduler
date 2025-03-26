@@ -22,6 +22,8 @@ public class Task {
         this.userId = userId;
         this.content = content;
         this.password = password;
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+        this.updatedAt = new Timestamp(System.currentTimeMillis());
     }
     //조회를 위한 생성자
     public Task(Long taskId, Long userId, String content, String password){
