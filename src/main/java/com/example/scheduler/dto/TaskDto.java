@@ -4,6 +4,7 @@ import com.example.scheduler.entity.Task;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
 //Service와 Repository 계층을 오가는 DTO
@@ -27,10 +28,10 @@ public class TaskDto {
         this.updateAt = formatter.format(task.getUpdatedAt()); //LocalTimeDate를 String으로 변환
     }
 
-    public TaskDto(Long id, Task task){
+    public TaskDto(Long id, Task task, Timestamp updateTime){
         this.taskId = id;
         this.userId = task.getUserId();
         this.content = task.getContent();
-        this.updateAt = formatter.format(task.getUpdatedAt()); //LocalTimeDate를 String으로 변환
+        this.updateAt = formatter.format(updateTime); //LocalTimeDate를 String으로 변환
     }
 }

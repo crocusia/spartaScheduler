@@ -1,6 +1,7 @@
 package com.example.scheduler.service;
 
 import com.example.scheduler.dto.TaskCreateRequestDto;
+import com.example.scheduler.dto.TaskDeleteRequestDto;
 import com.example.scheduler.dto.TaskResponseDto;
 import com.example.scheduler.dto.TaskUpdateRequestDto;
 import org.springframework.http.HttpStatus;
@@ -20,5 +21,5 @@ public interface TaskService {
     //수정 - userId 또는 content 수정
     TaskResponseDto updateTask(Long id, TaskUpdateRequestDto updateDto);
     //삭제
-    void deleteTask(Long id);
+    void deleteTask(Long id, TaskDeleteRequestDto deleteDto);
 }

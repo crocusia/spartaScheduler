@@ -1,5 +1,6 @@
 package com.example.scheduler.controller;
 
+import com.example.scheduler.dto.TaskDeleteRequestDto;
 import org.springframework.web.bind.annotation.*;
 import com.example.scheduler.dto.TaskCreateRequestDto;
 import com.example.scheduler.dto.TaskResponseDto;
@@ -50,9 +51,8 @@ public class TaskController {
 
     //일정 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
-
-        taskService.deleteTask(id);
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id, @RequestBody TaskDeleteRequestDto deleteDto) {
+        taskService.deleteTask(id, deleteDto);
         // 성공한 경우
         return new ResponseEntity<>(HttpStatus.OK);
     }

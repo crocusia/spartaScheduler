@@ -1,9 +1,6 @@
 package com.example.scheduler.service;
 
-import com.example.scheduler.dto.TaskCreateRequestDto;
-import com.example.scheduler.dto.TaskDto;
-import com.example.scheduler.dto.TaskResponseDto;
-import com.example.scheduler.dto.TaskUpdateRequestDto;
+import com.example.scheduler.dto.*;
 import com.example.scheduler.entity.Task;
 import com.example.scheduler.repository.TaskRepository;
 import org.springframework.stereotype.Service;
@@ -77,7 +74,13 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    public void deleteTask(Long id) {
+    public void deleteTask(Long id, TaskDeleteRequestDto deleteDto) {
+        //기존 일정 조회
+        Task task = taskRepository.findTaskByIdWithPwd(id);
+        //조회한 일정의 비밀번호와 넘겨 받은 비밀번호 비교
+        if (!task.getPassword().equals(deleteDto.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "비밀번호 입력 오류");
+        }
         // 일정 삭제
         int deletedRow = taskRepository.deleteTask(id);
         // 삭제된 row가 0개 라면
