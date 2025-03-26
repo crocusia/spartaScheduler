@@ -76,4 +76,14 @@ public class TaskServiceImpl implements TaskService{
         return findTaskById(task.getTaskId());
     }
 
+    @Override
+    public void deleteTask(Long id) {
+        // 일정 삭제
+        int deletedRow = taskRepository.deleteTask(id);
+        // 삭제된 row가 0개 라면
+        if (deletedRow == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+        }
+    }
+
 }

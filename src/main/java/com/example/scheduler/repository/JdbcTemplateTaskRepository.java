@@ -102,9 +102,16 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
 
     //일정 업데이트
     @Override
-    public void updateTask(Task task){
+    public int updateTask(Task task){
         String sql = "UPDATE tasks SET user_id = ? WHERE task_id = ?";
-        jdbcTemplate.update(sql, task.getUserId(), task.getTaskId());
+        return jdbcTemplate.update(sql, task.getUserId(), task.getTaskId());
+    }
+
+    //일정 삭제
+    @Override
+    public int deleteTask(Long id) {
+        String sql = "DELETE FROM tasks WHERE task_id = ?";
+        return jdbcTemplate.update("DELETE FROM tasks WHERE task_id = ?", id);
     }
 
     //매핑

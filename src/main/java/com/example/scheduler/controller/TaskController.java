@@ -41,7 +41,7 @@ public class TaskController {
 
     //일정 수정
     @PatchMapping("/{id}")
-    public ResponseEntity<TaskResponseDto> updateTitle(
+    public ResponseEntity<TaskResponseDto> updateTask(
             @PathVariable Long id,
             @RequestBody TaskUpdateRequestDto updateDto
     ) {
@@ -49,5 +49,11 @@ public class TaskController {
     }
 
     //일정 삭제
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
 
+        taskService.deleteTask(id);
+        // 성공한 경우
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

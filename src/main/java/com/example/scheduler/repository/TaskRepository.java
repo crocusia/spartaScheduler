@@ -19,8 +19,8 @@ public interface TaskRepository {
     //일정 내용 수정
     Task findTaskByIdWithPwd(Long id);
     //일정 업데이트
-    void updateTask(Task task);
+    int updateTask(Task task);
 
     //일정 삭제
-
+    int deleteTask(Long id);
 }

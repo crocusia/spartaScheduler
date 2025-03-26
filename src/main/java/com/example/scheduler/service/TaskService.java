@@ -19,4 +19,6 @@ public interface TaskService {
     TaskResponseDto findTaskById(Long id);
     //수정 - userId 또는 content 수정
     TaskResponseDto updateTask(Long id, TaskUpdateRequestDto updateDto);
+    //삭제
+    void deleteTask(Long id);
 }
