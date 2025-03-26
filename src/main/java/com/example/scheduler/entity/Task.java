@@ -17,14 +17,13 @@ public class Task {
     private Timestamp createdAt; //등록일
     private Timestamp updatedAt; //수정일
 
-    //저장을 위한 생성자
+    //저장을 위한 생성자 : taskId는 생성되지 않음
     public Task(Long userId, String content, String password){
         this.userId = userId;
         this.content = content;
         this.password = password;
-        this.createdAt = new Timestamp(System.currentTimeMillis());
-        this.updatedAt = new Timestamp(System.currentTimeMillis());
     }
+
     //조회를 위한 생성자
     public Task(Long taskId, Long userId, String content, String password){
         this.taskId = taskId;

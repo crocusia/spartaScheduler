@@ -16,7 +16,6 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,30 +29,34 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    // 날짜 포맷 (YYYY-MM-DD HH:MM)
-    private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
     //DB에 Task 저장 및 저장 내용 반환
     @Override
     public TaskDto saveTask(Task task) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("tasks")
-                .usingGeneratedKeyColumns("task_id");
+                .usingGeneratedKeyColumns("task_id")
+                .usingColumns( "user_id", "content", "password");
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("user_id", task.getUserId());  //작성자 ID
         parameters.put("content", task.getContent());  //할 일
         parameters.put("password", task.getPassword()); //비밀번호
+
         //일정 고유키 반환
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
-        //TaskDto로 날짜를 String으로 반환
-        return new TaskDto(key.longValue(), task);
+
+        //날짜 반환
+        String sql = "SELECT updated_at FROM tasks WHERE task_id = ?";
+        Timestamp updatedAt = jdbcTemplate.queryForObject(sql, Timestamp.class, key);
+
+        //TaskDto를 생성
+        return new TaskDto(key.longValue(), task, updatedAt);
     }
 
     //userId 또는 updateAt에 해당하는 일정 전체 조회
     @Override
     public List<TaskResponseDto> findTasks(Long userId, String updatedAt){
-        //일정 전체 조회
+        //일정 전체 조회 (조건 미입력 시, 전체 일정 조회)
         StringBuilder sql = new StringBuilder(
                 "SELECT t.task_id, t.user_id, u.name, t.content, t.updated_at " +
                         "FROM tasks t " +
@@ -62,22 +65,20 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
 
         // 동적 조건 추가 여부
         List<Object> params = new ArrayList<>();
-        boolean hasCondition = false;
 
         if (userId != null) { //유저 아이디를 입력 받았다면
             sql.append("WHERE t.user_id = ? "); //유저 아이디 조건 추가
             params.add(userId);
-            hasCondition = true;
         }
 
         if (updatedAt != null && !updatedAt.isEmpty()) { //유저 아이디를 입력 받지 않았다면
-            if (hasCondition) { //앞에 유저 아이디가 조건으로 추가되어있으면
+            if (userId != null) { //앞에 유저 아이디가 조건으로 추가되어있으면
                 sql.append("AND "); //AND 추가
             } else {
                 sql.append("WHERE "); //아니면 바로 WHERE 추가 후
             }
             Date date = Date.valueOf(updatedAt);
-            sql.append("DATE(t.updated_at) >= ? "); //수정일 조건 추가
+            sql.append("DATE(t.updated_at) = ? "); //수정일 조건 추가
             params.add(date);
         }
 
@@ -102,9 +103,12 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
 
     //일정 업데이트
     @Override
-    public int updateTask(Task task){
-        String sql = "UPDATE tasks SET user_id = ? WHERE task_id = ?";
-        return jdbcTemplate.update(sql, task.getUserId(), task.getTaskId());
+    public TaskDto updateTask(Task task){
+        int updateRow = jdbcTemplate.update("UPDATE tasks SET user_id = ?, content = ? WHERE task_id = ?", task.getUserId(), task.getContent(), task.getTaskId());
+        if (updateRow == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 아이디의 일정이 존재하지 않습니다. = " + task.getTaskId());
+        }
+        return findTaskByIdOrElseThrow(task.getTaskId());
     }
 
     //일정 삭제
@@ -123,7 +127,7 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
                         rs.getLong("task_id"),
                         rs.getString("name"),
                         rs.getString("content"),
-                        formatter.format(rs.getTimestamp("updated_at"))
+                        rs.getTimestamp("updated_at")
                 );
             }
         };
@@ -137,7 +141,7 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
                         rs.getLong("task_id"),
                         rs.getLong("user_id"),
                         rs.getString("content"),
-                        formatter.format(rs.getTimestamp("updated_at"))
+                        rs.getTimestamp("updated_at")
                 );
             }
         };
