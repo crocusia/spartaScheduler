@@ -60,25 +60,21 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
         StringBuilder sql = new StringBuilder(
                 "SELECT t.task_id, t.user_id, u.name, t.content, t.updated_at " +
                         "FROM tasks t " +
-                        "JOIN users u ON t.user_id = u.user_id "
+                        "JOIN users u ON t.user_id = u.user_id " +
+                        "WHERE 1 = 1"
         );
 
         // 동적 조건 추가 여부
         List<Object> params = new ArrayList<>();
 
         if (userId != null) { //유저 아이디를 입력 받았다면
-            sql.append("WHERE t.user_id = ? "); //유저 아이디 조건 추가
+            sql.append(" AND t.user_id = ? "); //유저 아이디 조건 추가
             params.add(userId);
         }
 
         if (updatedAt != null && !updatedAt.isEmpty()) { //유저 아이디를 입력 받지 않았다면
-            if (userId != null) { //앞에 유저 아이디가 조건으로 추가되어있으면
-                sql.append("AND "); //AND 추가
-            } else {
-                sql.append("WHERE "); //아니면 바로 WHERE 추가 후
-            }
             Date date = Date.valueOf(updatedAt);
-            sql.append("DATE(t.updated_at) = ? "); //수정일 조건 추가
+            sql.append(" AND DATE(t.updated_at) = ? "); //수정일 조건 추가
             params.add(date);
         }
 
