@@ -53,7 +53,7 @@
 - 작성자의 고유 식별자를 통해 일정 조회 가능하도록 전체 일정 조회 코드 수정
 - 일정 테이블에서 작성자의 고유 식별자를 외래키(FK)로 설정
 
-<br><br><br>
+<br><br>
 ### API 명세서
 https://documenter.getpostman.com/view/43241868/2sAYkLmcYN
 
