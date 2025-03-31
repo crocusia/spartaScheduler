@@ -27,20 +27,25 @@ public class TaskController {
     //일정 생성
     @PostMapping
     public ResponseEntity<TaskResponseDto> createTask(@Valid @RequestBody TaskCreateRequestDto createDto) {
-        return new ResponseEntity<>(taskService.saveTask(createDto), HttpStatus.CREATED);
+        TaskResponseDto taskResponseDto = taskService.saveTask(createDto);
+        return ResponseEntity.ok(taskResponseDto);
     }
+
     //특정 조건을 만족하는 일정 전체 조회
     @GetMapping
     public ResponseEntity<List<TaskResponseDto>> findTasks(
             @RequestParam(required = false) Optional<Long> userId,
             @RequestParam(required = false, defaultValue = "") String updatedAt) {
         Long userIdValue = userId.orElse(null);
-        return new ResponseEntity<>(taskService.findTasks(userIdValue, updatedAt), HttpStatus.OK) ;
+        List<TaskResponseDto> taskResponseDto = taskService.findTasks(userIdValue, updatedAt);
+        return ResponseEntity.ok(taskResponseDto);
     }
+
     //일정 Id에 따른 일정 조회
     @GetMapping("/{id}")
     public ResponseEntity<TaskResponseDto> findTaskById(@PathVariable Long id) {
-        return new ResponseEntity<>(taskService.findTaskById(id), HttpStatus.OK);
+        TaskResponseDto taskResponseDto = taskService.findTaskById(id);
+        return ResponseEntity.ok(taskResponseDto);
     }
 
     //일정 수정
@@ -49,7 +54,8 @@ public class TaskController {
             @PathVariable @Min(1) Long id,
             @Valid @RequestBody TaskUpdateRequestDto updateDto
     ) {
-        return new ResponseEntity<>(taskService.updateTask(id, updateDto), HttpStatus.OK);
+        TaskResponseDto taskResponseDto = taskService.updateTask(id, updateDto);
+        return ResponseEntity.ok(taskResponseDto);
     }
 
     //일정 삭제
@@ -59,6 +65,6 @@ public class TaskController {
             @Valid @RequestBody TaskDeleteRequestDto deleteDto) {
         taskService.deleteTask(id, deleteDto);
         // 성공한 경우
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 }

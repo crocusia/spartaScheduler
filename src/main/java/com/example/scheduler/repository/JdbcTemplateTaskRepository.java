@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class JdbcTemplateTaskRepository implements TaskRepository{
+public class JdbcTemplateTaskRepository implements TaskRepository {
     private final JdbcTemplate jdbcTemplate;
 
     public JdbcTemplateTaskRepository(DataSource dataSource) {
@@ -35,7 +35,7 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("tasks")
                 .usingGeneratedKeyColumns("task_id")
-                .usingColumns( "user_id", "content", "password");
+                .usingColumns("user_id", "content", "password");
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("user_id", task.getUserId());  //작성자 ID
@@ -55,7 +55,7 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
 
     //userId 또는 updateAt에 해당하는 일정 전체 조회
     @Override
-    public List<TaskResponseDto> findTasks(Long userId, String updatedAt){
+    public List<TaskResponseDto> findTasks(Long userId, String updatedAt) {
         //일정 전체 조회 (조건 미입력 시, 전체 일정 조회)
         StringBuilder sql = new StringBuilder(
                 "SELECT t.task_id, t.user_id, u.name, t.content, t.updated_at " +
@@ -85,21 +85,21 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
 
     //id에 해당하는 일정 선택 조회
     @Override
-    public TaskDto findTaskByIdOrElseThrow(Long id){
+    public TaskDto findTaskByIdOrElseThrow(Long id) {
         List<TaskDto> result = jdbcTemplate.query("SELECT task_id, user_id, content, updated_at FROM tasks WHERE task_id = ?", taskRowMapperDto(), id);
         return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 일정입니다. = " + id));
     }
 
     //id에 따른 일정 수정을 위한 Task 조회
     @Override
-    public Task findTaskByIdWithPwd(Long id){
+    public Task findTaskByIdWithPwd(Long id) {
         List<Task> result = jdbcTemplate.query("SELECT * FROM tasks WHERE task_id = ?", taskRowMapperEntity(), id);
         return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 일정입니다. = " + id));
     }
 
     //일정 업데이트
     @Override
-    public TaskDto updateTask(Task task){
+    public TaskDto updateTask(Task task) {
         int updateRow = jdbcTemplate.update("UPDATE tasks SET user_id = ?, content = ? WHERE task_id = ?", task.getUserId(), task.getContent(), task.getTaskId());
         if (updateRow == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 아이디의 일정이 존재하지 않습니다. = " + task.getTaskId());
@@ -115,7 +115,7 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
     }
 
     //매핑
-    private RowMapper<TaskResponseDto> taskRowMapperResponseDto(){
+    private RowMapper<TaskResponseDto> taskRowMapperResponseDto() {
         return new RowMapper<TaskResponseDto>() {
             @Override
             public TaskResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -129,7 +129,7 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
         };
     }
 
-    private RowMapper<TaskDto> taskRowMapperDto(){
+    private RowMapper<TaskDto> taskRowMapperDto() {
         return new RowMapper<TaskDto>() {
             @Override
             public TaskDto mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -143,7 +143,7 @@ public class JdbcTemplateTaskRepository implements TaskRepository{
         };
     }
 
-    private RowMapper<Task> taskRowMapperEntity(){
+    private RowMapper<Task> taskRowMapperEntity() {
         return new RowMapper<Task>() {
             @Override
             public Task mapRow(ResultSet rs, int rowNum) throws SQLException {

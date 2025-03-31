@@ -16,16 +16,16 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handlerMethodArgumentNotValidException(MethodArgumentNotValidException e){
+    public ResponseEntity<Map<String, String>> handlerMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         Map<String, String> errors = new HashMap<>();
-        for(FieldError error : e.getBindingResult().getFieldErrors()){
+        for (FieldError error : e.getBindingResult().getFieldErrors()) {
             errors.put(error.getField(), error.getDefaultMessage());
         }
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Map<String, String>> handlerConstraintViolationException(ConstraintViolationException e){
+    public ResponseEntity<Map<String, String>> handlerConstraintViolationException(ConstraintViolationException e) {
         Map<String, String> errors = new HashMap<>();
         for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
             String fieldName = violation.getPropertyPath().toString();

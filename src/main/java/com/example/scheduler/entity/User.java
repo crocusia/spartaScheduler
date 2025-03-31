@@ -17,14 +17,14 @@ public class User {
     private Timestamp updatedAt; //수정일
 
     //저장을 위한 생성자
-    public User(String name, String email, String password){
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
     }
 
     //조회를 위한 생성자
-    public User(Long userId, String name, String email, String password){
+    public User(Long userId, String name, String email, String password) {
         this.userId = userId;
         this.name = name;
         this.email = email;
@@ -32,13 +32,13 @@ public class User {
     }
 
     //작성자명 수정
-    public void updateName(String name){
+    public void updateName(String name) {
         this.name = name;
     }
 
     //비밀번호 비교
-    public boolean comparePassword(String inputPassword){
-        if(this.password.equals(inputPassword)){
+    public boolean comparePassword(String inputPassword) {
+        if (this.password.equals(inputPassword)) {
             return true;
         }
         return false;

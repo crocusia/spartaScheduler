@@ -18,7 +18,7 @@ public class TaskDto {
     private final String content;
     private final Timestamp updateAt; //DB 데이터를 그대로 반환
 
-    public TaskDto(Long id, Task task, Timestamp updateTime){
+    public TaskDto(Long id, Task task, Timestamp updateTime) {
         this.taskId = id;
         this.userId = task.getUserId();
         this.content = task.getContent();

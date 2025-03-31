@@ -12,11 +12,13 @@ public interface TaskRepository {
 
     //userId 또는 updateAt에 해당하는 일정 전체 조회
     List<TaskResponseDto> findTasks(Long userId, String updatedAt);
+
     //id에 해당하는 일정 선택 조회
     TaskDto findTaskByIdOrElseThrow(Long id);
 
     //일정 내용 수정
     Task findTaskByIdWithPwd(Long id);
+
     //일정 업데이트
     TaskDto updateTask(Task task);
 

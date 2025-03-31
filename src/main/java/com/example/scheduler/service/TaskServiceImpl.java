@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 
 @Service
-public class TaskServiceImpl implements TaskService{
+public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final UserService userService;
@@ -36,14 +36,14 @@ public class TaskServiceImpl implements TaskService{
 
     //조회 - 조건을 만족하는 일정 전체 -> 얘만 조인으로 리턴하자
     @Override
-    public List<TaskResponseDto> findTasks(Long userId, String updatedAt){
+    public List<TaskResponseDto> findTasks(Long userId, String updatedAt) {
         //유저 아이디와 수정일은 리스트에서 선택했다는 가정하에 검증하지 않음
         return taskRepository.findTasks(userId, updatedAt);
     }
 
     //조회 - id를 통한 단일 일정 조회
     @Override
-    public TaskResponseDto findTaskById(Long id){
+    public TaskResponseDto findTaskById(Long id) {
         TaskDto taskDto = taskRepository.findTaskByIdOrElseThrow(id);
         // 유저 Id 기반 유저 이름 조회
         String name = userService.findUserName(taskDto.getUserId());
@@ -53,7 +53,7 @@ public class TaskServiceImpl implements TaskService{
     //수정 - userId 또는 content 수정
     @Transactional
     @Override
-    public TaskResponseDto updateTask(Long id, TaskUpdateRequestDto updateDto){
+    public TaskResponseDto updateTask(Long id, TaskUpdateRequestDto updateDto) {
         //기존 일정 조회
         Task task = taskRepository.findTaskByIdWithPwd(id);
         //비밀번호 비교
@@ -61,13 +61,13 @@ public class TaskServiceImpl implements TaskService{
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "비밀번호 입력 오류");
         }
         //작성자 Id 수정
-        if (updateDto.getUserId() != null){
+        if (updateDto.getUserId() != null) {
             //유저 아이디는 리스트에서 선택했다는 가정하에 검증하지 않음
             //유저 이름은 유저 레포지토리에서 별도로 변경, 이건 일정을 수행해야 하는 유저를 변경하는 기능
             task.updateUserId(updateDto.getUserId());
         }
         //할 일 수정
-        if(updateDto.getContent() != null && !updateDto.getContent().isEmpty()){
+        if (updateDto.getContent() != null && !updateDto.getContent().isEmpty()) {
             task.updateContent(updateDto.getContent());
         }
         //수정된 일정 저장

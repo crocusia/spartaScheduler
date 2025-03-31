@@ -32,11 +32,11 @@ public class JdbcTemplateUserRepository implements UserRepository {
 
     //유저 생성
     @Override
-    public UserResponseDto saveUser(User user){
+    public UserResponseDto saveUser(User user) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("users")
                 .usingGeneratedKeyColumns("user_id")
-                .usingColumns( "name", "email", "password");
+                .usingColumns("name", "email", "password");
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("name", user.getName());  //작성자 ID
@@ -56,48 +56,50 @@ public class JdbcTemplateUserRepository implements UserRepository {
 
     //유저 조회
     @Override
-    public UserResponseDto findUserByIdOrElseThrow(Long id){
+    public UserResponseDto findUserByIdOrElseThrow(Long id) {
         List<UserResponseDto> result = jdbcTemplate.query("SELECT user_id, name, email, updated_at FROM users WHERE user_id = ?", userRowMapperResponseDto(), id);
         return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다. = " + id));
     }
 
     //유저 이름만 조회! userId에 해당하는 이름 조회
     @Override
-    public String findUserName(Long id){
+    public String findUserName(Long id) {
         String sql = "SELECT name FROM users WHERE user_id = ?";
         return jdbcTemplate.queryForObject(sql, String.class, id);
     }
 
     @Override
-    public User findUserWithPwd(Long id){
+    public User findUserWithPwd(Long id) {
         List<User> result = jdbcTemplate.query("SELECT user_id, name, email, password FROM users WHERE user_id = ?", userRowMapperEntity(), id);
         return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다. = " + id));
     }
 
     @Override
-    public boolean checkUserExist(Long id){
+    public boolean checkUserExist(Long id) {
         String sql = "SELECT COUNT(*) FROM users WHERE user_id = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
         return count != null && count > 0;
     }
+
     //유저 이름 수정
     @Override
-    public UserResponseDto updateUser(Long id, String name){
+    public UserResponseDto updateUser(Long id, String name) {
         int updateRow = jdbcTemplate.update("UPDATE users SET name = ? WHERE user_id = ?", name, id);
         if (updateRow == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 아이디의 유저가 존재하지 않습니다. = " + id);
         }
         return findUserByIdOrElseThrow(id);
     }
+
     //유저 삭제
     @Override
-    public int deleteUser(Long id){
+    public int deleteUser(Long id) {
         String sql = "DELETE FROM users WHERE user_id = ?";
         return jdbcTemplate.update("DELETE FROM users WHERE user_id = ?", id);
     }
 
     //매핑
-    private RowMapper<UserResponseDto> userRowMapperResponseDto(){
+    private RowMapper<UserResponseDto> userRowMapperResponseDto() {
         return new RowMapper<UserResponseDto>() {
             @Override
             public UserResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -110,7 +112,8 @@ public class JdbcTemplateUserRepository implements UserRepository {
             }
         };
     }
-    private RowMapper<User> userRowMapperEntity(){
+
+    private RowMapper<User> userRowMapperEntity() {
         return new RowMapper<User>() {
             @Override
             public User mapRow(ResultSet rs, int rowNum) throws SQLException {

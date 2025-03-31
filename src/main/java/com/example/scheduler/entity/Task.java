@@ -43,8 +43,8 @@ public class Task {
     }
 
     //비밀번호 비교
-    public boolean comparePassword(String inputPassword){
-        if(this.password.equals(inputPassword)){
+    public boolean comparePassword(String inputPassword) {
+        if (this.password.equals(inputPassword)) {
             return true;
         }
         return false;
