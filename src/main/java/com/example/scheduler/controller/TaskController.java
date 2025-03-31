@@ -1,6 +1,9 @@
 package com.example.scheduler.controller;
 
 import com.example.scheduler.dto.TaskDeleteRequestDto;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.example.scheduler.dto.TaskCreateRequestDto;
 import com.example.scheduler.dto.TaskResponseDto;
@@ -23,7 +26,7 @@ public class TaskController {
 
     //일정 생성
     @PostMapping
-    public ResponseEntity<TaskResponseDto> createTask(@RequestBody TaskCreateRequestDto createDto) {
+    public ResponseEntity<TaskResponseDto> createTask(@Valid @RequestBody TaskCreateRequestDto createDto) {
         return new ResponseEntity<>(taskService.saveTask(createDto), HttpStatus.CREATED);
     }
     //특정 조건을 만족하는 일정 전체 조회
@@ -43,8 +46,8 @@ public class TaskController {
     //일정 수정
     @PatchMapping("/{id}")
     public ResponseEntity<TaskResponseDto> updateTask(
-            @PathVariable Long id,
-            @RequestBody TaskUpdateRequestDto updateDto
+            @PathVariable @Min(1) Long id,
+            @Valid @RequestBody TaskUpdateRequestDto updateDto
     ) {
         return new ResponseEntity<>(taskService.updateTask(id, updateDto), HttpStatus.OK);
     }
@@ -52,8 +55,8 @@ public class TaskController {
     //일정 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(
-            @PathVariable Long id,
-            @RequestBody TaskDeleteRequestDto deleteDto) {
+            @PathVariable @Min(1) Long id,
+            @Valid @RequestBody TaskDeleteRequestDto deleteDto) {
         taskService.deleteTask(id, deleteDto);
         // 성공한 경우
         return new ResponseEntity<>(HttpStatus.OK);
