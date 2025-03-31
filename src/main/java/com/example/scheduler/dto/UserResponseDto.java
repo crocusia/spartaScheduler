@@ -17,7 +17,7 @@ public class UserResponseDto {
     // 날짜 포맷 (YYYY-MM-DD HH:MM)
     private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-    public UserResponseDto(Long userId, String name, String email, Timestamp updateAt){
+    public UserResponseDto(Long userId, String name, String email, Timestamp updateAt) {
         this.userId = userId;
         this.name = name;
         this.email = email;
