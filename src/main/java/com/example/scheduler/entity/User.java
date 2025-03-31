@@ -35,4 +35,12 @@ public class User {
     public void updateName(String name){
         this.name = name;
     }
+
+    //비밀번호 비교
+    public boolean comparePassword(String inputPassword){
+        if(this.password.equals(inputPassword)){
+            return true;
+        }
+        return false;
+    }
 }

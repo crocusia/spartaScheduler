@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
         //기존 유저 조회
         User user = userRepository.findUserWithPwd(id);
         //비밀번호 비교
-        if (!user.getPassword().equals(updateDto.getPassword())) {
+        if (!user.comparePassword(updateDto.getPassword())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "비밀번호 입력 오류");
         }
         //작성자 이름 수정
@@ -60,14 +60,14 @@ public class UserServiceImpl implements UserService {
         //기존 일정 조회
         User user = userRepository.findUserWithPwd(id);
         //조회한 일정의 비밀번호와 넘겨 받은 비밀번호 비교
-        if (!user.getPassword().equals(deleteDto.getPassword())) {
+        if (!user.comparePassword(deleteDto.getPassword())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "비밀번호 입력 오류");
         }
         // 일정 삭제
         int deletedRow = userRepository.deleteUser(id);
         // 삭제된 row가 0개 라면
         if (deletedRow == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 유저가 존재하지 않습니다. = " + id);
         }
     }
 }
