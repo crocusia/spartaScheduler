@@ -53,6 +53,18 @@
 - 작성자의 고유 식별자를 통해 일정 조회 가능하도록 전체 일정 조회 코드 수정
 - 일정 테이블에서 작성자의 고유 식별자를 외래키(FK)로 설정
 
+## Lv 5. 예외 발생 처리
+
+### ✅ 예외 상황에 따른 상태 코드 반환, 에러 메시지가 포함된 정보 사용
+- @ExceptionHandler를 활용해 공통 예외 처리
+
+## Lv 6. null 체크 및 특정 패턴에 대한 검증 수행
+
+### ✅ 유효성 검사
+- 할일 최대 200자, 필수값
+- 비밀번호 필수값
+- 이메일 형식 검사
+
 <br><br>
 ### API 명세서
 https://documenter.getpostman.com/view/43241868/2sAYkLmcYN
@@ -61,4 +73,4 @@ https://documenter.getpostman.com/view/43241868/2sAYkLmcYN
 ![EDR](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FpYJ11%2FbtsMVSO2T4H%2FBSvTrbzmnbkZiwUcFTbkW1%2Fimg.png)
 
 ### 구현 방법 및 트러블 슈팅
-[작성 중] https://devhippo.tistory.com/ 
+https://devhippo.tistory.com/ 
